@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lexend:wght@400;600;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-brand-black text-white font-sans antialiased overflow-x-hidden;
+    /* Ensuring the background is solid black to prevent ghosting during scrolls */
+    background-color: #0A0A0A;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+}
+
+@layer components {
+  /* Custom Scrollbar for a premium look */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-brand-black;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-brand-lightGrey rounded-full hover:bg-brand-orange transition-colors;
+  }
+
+  /* Glassmorphism utility for clean overlays */
+  .glass {
+    @apply bg-white/5 backdrop-blur-lg border border-white/10;
+  }
+
+  /* Anti-boring button effect */
+  .btn-primary {
+    @apply relative overflow-hidden bg-brand-orange text-white px-8 py-4 rounded-2xl font-black 
+           uppercase tracking-widest transition-all duration-300 
+           hover:shadow-[0_0_30px_rgba(255,140,0,0.3)] hover:-translate-y-1 active:scale-95;
+  }
+
+  /* Smooth reveal for product cards */
+  .reveal {
+    animation: reveal 0.8s cubic-bezier(0, 0, 0.2, 1) forwards;
+  }
+}
+
+@layer utilities {
+  /* Custom selection color (The Orange Highlight) */
+  ::selection {
+    @apply bg-brand-orange text-white;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Custom Keyframes for the "Non-Boring" entry animations */
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera (Used in horizontal product carousels if needed) */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Responsive container padding for ultra-wide monitors */
+@media (min-width: 1920px) {
+  .container {
+    max-width: 1800px;
+  }
+}
