@@ -43,10 +43,12 @@ const Navbar = () => {
         
         {/* LOGO */}
         <Link to="/" className="flex flex-col leading-none">
+          <div className="flex items-center space-x-3">
           <img src="one wave final 2.png" className="h-12 w-12"/>
           <span className="text-xl md:text-2xl font-display font-black tracking-tighter uppercase">
             ONE<span className="text-brand-orange">WAVE</span>
           </span>
+          </div>
           <span className="text-[8px] md:text-[10px] tracking-[0.3em] font-bold text-gray-500 uppercase">Africa</span>
         </Link>
 
