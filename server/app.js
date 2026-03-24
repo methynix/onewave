@@ -7,22 +7,25 @@ const rateLimit = require('express-rate-limit');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./middlewares/errorMiddleware');
 
-// Route Imports
 const productRoutes = require('./routes/productRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 
 const app = express();
 
-// 1. GLOBAL MIDDLEWARES
-app.use(helmet()); // Security Headers
-app.use(cors()); // Enable Cross-Origin Resource Sharing
-app.use(express.json({ limit: '10kb' })); // Body parser
+app.use(helmet()); 
+app.use(cors({
+  origin:process.env.CLIENT_URL,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+  credentials: true, 
+  allowedHeaders: ["Content-Type", "Authorization"],
+})); 
+app.use(express.json({ limit: '10kb' }));
 
 if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev')); // Logging
+  app.use(morgan('dev')); 
 }
 
-// Rate Limiting (Prevent Brute Force)
+
 const limiter = rateLimit({
   max: 100,
   windowMs: 60 * 60 * 1000,
@@ -30,7 +33,6 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
-// 2. ROUTES
 app.use('/api/v1/products', productRoutes);
 app.use('/api/v1/contact', contactRoutes);
 
@@ -40,7 +42,6 @@ app.use('/api/v1/contact', contactRoutes);
 //   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 // });
 
-// 4. GLOBAL ERROR HANDLER
 app.use(globalErrorHandler);
 
 app.listen(process.env.PORT,()=>{
