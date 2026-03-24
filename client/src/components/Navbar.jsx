@@ -43,6 +43,7 @@ const Navbar = () => {
         
         {/* LOGO */}
         <Link to="/" className="flex flex-col leading-none">
+          <img src="one wave final 2.png" className="h-12 w-12"/>
           <span className="text-xl md:text-2xl font-display font-black tracking-tighter uppercase">
             ONE<span className="text-brand-orange">WAVE</span>
           </span>
