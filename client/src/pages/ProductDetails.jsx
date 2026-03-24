@@ -135,7 +135,7 @@ const ProductDetails = () => {
           {/* WHATSAPP CONVERSION */}
           <div className="pt-6">
             <a 
-              href={`https://wa.me/255712345678?text=I am interested in the ${product.name}. Please send more details.`}
+              href={`https://wa.me/255752773798?text=I am interested in the ${product.name}. Please send more details.`}
               target="_blank"
               rel="noreferrer"
               className="w-full bg-brand-orange text-white py-6 rounded-[2rem] font-black uppercase tracking-widest flex items-center justify-center gap-4 hover:bg-white hover:text-brand-orange transition-all shadow-2xl shadow-brand-orange/20 transform active:scale-95 group"
