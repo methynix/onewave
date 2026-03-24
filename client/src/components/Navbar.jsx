@@ -45,11 +45,13 @@ const Navbar = () => {
         <Link to="/" className="flex flex-col leading-none">
           <div className="flex items-center space-x-3">
           <img src="one wave final 2.png" className="h-12 w-12"/>
+          <div className="flex flex-col space-y-1">
           <span className="text-xl md:text-2xl font-display font-black tracking-tighter uppercase">
             ONE<span className="text-brand-orange">WAVE</span>
           </span>
-          </div>
           <span className="text-[8px] md:text-[10px] tracking-[0.3em] font-bold text-gray-500 uppercase">Africa</span>
+        </div>
+        </div>
         </Link>
 
         {/* DESKTOP MENU */}
@@ -69,9 +71,12 @@ const Navbar = () => {
               <AnimatePresence>
                 {activeDropdown === catGroup.group && (
                   <motion.div 
-                    initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                    className="absolute top-full left-0 w-64 bg-brand-darkGrey border border-white/10 rounded-2xl p-4 shadow-2xl"
-                  >
+  initial={{ x: '100%' }} 
+  animate={{ x: 0 }} 
+  exit={{ x: '100%' }}
+  transition={{ type: "spring", damping: 25, stiffness: 200 }}
+  className="fixed inset-0 top-20 bg-brand-black z-50 lg:hidden overflow-y-auto px-6 py-10 h-[calc(100vh-80px)]"
+>
                     {catGroup.items.map(item => (
                       <Link 
                         key={item.slug} 

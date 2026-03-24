@@ -24,7 +24,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       {/* 3. Wrap in CartProvider (Global State) */}
         <App />
       {/* Optional: Devtools - Only visible during development */}
-      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </React.StrictMode>
 );

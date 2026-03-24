@@ -53,7 +53,7 @@ const ProductDetails = () => {
         <FiChevronLeft /> Back to Inventory
       </Link>
 
-      <div className="grid lg:grid-cols-2 gap-16 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
         
         {/* LEFT: VISUAL SHOWCASE */}
         <div className="space-y-6 lg:sticky lg:top-28">
@@ -102,7 +102,7 @@ const ProductDetails = () => {
               </span>
             </div>
             
-            <h1 className="text-6xl md:text-8xl font-display font-black uppercase tracking-tighter italic leading-[0.85] mb-6">
+            <h1 className="text-4xl sm:text-6xl md:text-8xl font-display font-black uppercase tracking-tighter italic leading-[0.9] mb-6">
               {product.name}
             </h1>
             

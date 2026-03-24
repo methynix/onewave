@@ -23,7 +23,7 @@ const ContactPage = () => {
 
   return (
     <div className="min-h-screen py-20 px-4 max-w-6xl mx-auto">
-      <div className="grid lg:grid-cols-2 gap-20">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
         
         {/* LEFT: INFORMATION */}
         <div className="space-y-10">
