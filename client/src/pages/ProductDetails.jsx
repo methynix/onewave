@@ -69,7 +69,7 @@ const ProductDetails = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 src={activeImg} 
-                className="w-full h-full object-cover" 
+                className="w-full h-full object-contain p-10" 
                 alt={product.name} 
               />
             </AnimatePresence>
