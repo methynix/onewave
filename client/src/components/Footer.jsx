@@ -10,7 +10,7 @@ const Footer = () => {
         {/* Brand Column */}
         <div className="space-y-6">
           <h2 className="text-3xl font-display font-black uppercase tracking-tighter italic">
-            ONEWAVE<span className="text-brand-orange">AFRICA</span>
+            ONEWAVE <span className="text-brand-orange">AFRICA</span>
           </h2>
           <p className="text-gray-500 max-w-sm text-sm leading-relaxed">
             Premium distributor of tactical communication hardware and industrial solutions across the African continent.
@@ -52,7 +52,7 @@ const Footer = () => {
       </div>
 
       <div className="text-center mt-20 text-[10px] text-gray-700 uppercase tracking-[0.5em] font-bold">
-        © {new Date().getFullYear()} One Wave Africa • Rugged Solutions for the Continent
+        © {new Date().getFullYear()} OneWave Africa • Rugged Solutions for the Continent
       </div>
     </footer>
   );

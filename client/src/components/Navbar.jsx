@@ -61,42 +61,36 @@ const Navbar = () => {
         {/* DESKTOP MENU */}
 <div className="hidden lg:flex items-center gap-8">
   {categories.map((catGroup) => (
-    <div 
-      key={catGroup.group} 
-      className="relative py-4"
-      onMouseEnter={() => setActiveDropdown(catGroup.group)}
-      onMouseLeave={() => setActiveDropdown(null)}
-    >
-      <button 
-        onClick={() => toggleDropdown(catGroup.group)}
-        className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-gray-400 hover:text-brand-orange transition-colors outline-none"
-      >
-        {catGroup.group} 
-        <FiChevronDown className={`transition-transform duration-300 ${activeDropdown === catGroup.group ? 'rotate-180' : ''}`} />
-      </button>
+  <div 
+  className="relative group py-4"
+  onMouseEnter={() => setActiveDropdown(catGroup.group)}
+  onMouseLeave={() => setActiveDropdown(null)}
+>
+  <button className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-gray-400 group-hover:text-brand-orange transition-all duration-300">
+    {catGroup.group} <FiChevronDown className="group-hover:rotate-180 transition-transform" />
+  </button>
       
       {/* DROPDOWN - Fixed for Large Screens */}
       <AnimatePresence>
-        {activeDropdown === catGroup.group && (
-          <motion.div 
-            initial={{ opacity: 0, y: 15 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            exit={{ opacity: 0, y: 15 }}
-            className="absolute top-full left-0 w-64 bg-brand-darkGrey border border-white/10 rounded-2xl p-4 shadow-2xl z-[100]"
+    {activeDropdown === catGroup.group && (
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 10 }}
+        className="absolute top-full left-0 w-64 bg-brand-darkGrey border border-white/10 rounded-2xl p-4 shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-[100]"
+      >
+        {catGroup.items.map(item => (
+          <Link 
+            key={item.slug} 
+            to={`/category/${item.slug}`}
+            className="block py-3 px-4 hover:bg-brand-orange hover:text-white rounded-xl text-xs font-bold transition-all"
           >
-            {catGroup.items.map(item => (
-              <Link 
-                key={item.slug} 
-                to={`/category/${item.slug}`}
-                onClick={() => setActiveDropdown(null)}
-                className="block py-3 px-4 hover:bg-white/5 rounded-xl text-xs font-bold transition-colors"
-              >
-                {item.name}
-              </Link>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
+            {item.name}
+          </Link>
+        ))}
+      </motion.div>
+    )}
+  </AnimatePresence>
     </div>
   ))}
   <Link to="/about" className="text-[11px] font-black uppercase tracking-widest text-gray-400 hover:text-brand-orange">About</Link>
@@ -116,11 +110,13 @@ const Navbar = () => {
 
       {/* MOBILE MENU (RESPONSIVE DRAWER) */}
       <AnimatePresence>
-        {isOpen && (
-          <motion.div 
-            initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
-            className="fixed inset-0 top-20 bg-brand-black z-50 lg:hidden overflow-y-auto px-6 py-10"
-          >
+  {isOpen && (
+    <motion.div 
+      initial={{ y: '-100%' }} 
+      animate={{ y: 0 }} 
+      exit={{ y: '-100%' }}
+      className="fixed inset-0 top-20 bg-brand-black/95 backdrop-blur-xl z-[100] lg:hidden px-6 py-10 h-[45vh] border-b border-white/10 shadow-2xl overflow-y-auto"
+    >
             {categories.map(group => (
               <div key={group.group} className="mb-10">
                 <h3 className="text-brand-orange text-[10px] font-black uppercase tracking-[0.3em] mb-4">{group.group}</h3>
