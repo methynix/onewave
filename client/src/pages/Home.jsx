@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 const Home = () => {
   const { data: products, isLoading } = useGetProducts();
 
-  // Mapping for names below images
   const heroItems = [
     { name: "Android POS", src: "https://res.cloudinary.com/dwt1u991q/image/upload/v1/onewave_industrial_inventory/aprinter_(1)" },
     { name: "Security Baton", src: "https://res.cloudinary.com/dwt1u991q/image/upload/v1/onewave_industrial_inventory/baton_(1)" },
@@ -16,22 +15,21 @@ const Home = () => {
     { name: "POS Monitor", src: "https://res.cloudinary.com/dwt1u991q/image/upload/v1/onewave_industrial_inventory/posmonitor_(2)" },
     { name: "Mobile Radio", src: "https://res.cloudinary.com/dwt1u991q/image/upload/v1/onewave_industrial_inventory/radiobase_(1)" },
     { name: "Barcode Scanner", src: "https://res.cloudinary.com/dwt1u991q/image/upload/v1/onewave_industrial_inventory/scanner_(1)" },
-    { name: "Alcohol Tester", src: "https://res.cloudinary.com/dwt1u991q/image/upload/v1/onewave_industrial_inventory/tester_(1)" },
+    { name: "Alcohol Tester", src: "https://res.cloudinary.com/dwt1u991q/image/upload/v1/onewave_industrial_inventory/n6ziqgtpmofypzapezam" },
   ];
 
-  // Double the array for a seamless loop
-  const infiniteLoop = [...heroItems, ...heroItems];
+  const infiniteLoop = [...heroItems, ...heroItems, ...heroItems];
 
   return (
     <div className="pb-20 bg-brand-black">
       {/* CINEMATIC HERO */}
-      <section className="relative h-[90vh] flex items-center justify-center overflow-hidden border-b border-white/5">
+       <section className="relative h-[80svh] md:h-[85vh] flex items-center justify-center overflow-hidden border-b border-white/5">
         
         {/* THE CONTINUOUS MARQUEE */}
-        <div className="absolute inset-0 z-0">
+         <div className="absolute inset-0 z-0 flex items-center">
           <motion.div 
             className="flex h-full"
-            animate={{ x: ["0%", "-50%"] }} // Smoothly slides half the total width
+            animate={{ x: ["0%", "-33.33%"] }} // Smoothly slides half the total width
             transition={{ 
               ease: "linear", 
               duration: 10, // "Adorable Speed" - adjust for cinematic feel
@@ -42,7 +40,7 @@ const Home = () => {
               <div key={index} className="relative w-[100vw] md:w-[80vw] lg:w-[60vw] h-full flex-shrink-0 flex flex-col items-center justify-center p-12">
                 <img 
                   src={item.src.replace('/upload/', '/upload/f_auto,q_auto:best,w_2000/')} 
-                  className="w-full h-full object-contain opacity-60 mix-blend-screen"
+                  className="relative w-[100vw] h-full flex-shrink-0 flex flex-col items-center justify-center p-8 md:p-12"
                   alt="" 
                 />
                 {/* NAME OVERLAY BELOW IMAGE */}
@@ -55,7 +53,7 @@ const Home = () => {
 
           {/* VITAL CINEMATIC OVERLAY */}
           <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-brand-black" />
-          <div className="absolute inset-0 bg-brand-black/30 backdrop-blur-[1px]" />
+          <div className="absolute inset-0 bg-brand-black/20 backdrop-blur-[1px]" />
         </div>
 
         {/* HERO CONTENT */}
