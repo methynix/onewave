@@ -5,64 +5,55 @@ const path = require('path');
 const fs = require('fs');
 
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_NAME,
+  cloud_name: 'dwt1u991q',
   api_key: process.env.CLOUDINARY_KEY,
   api_secret: process.env.CLOUDINARY_SECRET
 });
 
-const fix = async () => {
-  console.log("🚀 Targeted Fix for Alcohol Tester...");
+const uploadPredictable = async (fileName, publicId) => {
+  const filePath = path.join(__dirname, '../client/public', fileName);
+  if (!fs.existsSync(filePath)) return null;
+  
+  const res = await cloudinary.uploader.upload(filePath, {
+    folder: "onewave_final",
+    public_id: publicId, // THIS FORCES THE URL TO BE PREDICTABLE
+    overwrite: true,
+    quality: "auto:best"
+  });
+  return res.secure_url;
+};
 
-  // 1. Tafuta bidhaa hata kama jina ni refu (kama 'Professional Digital...')
-  const { data: product } = await supabase
-    .from('products')
-    .select('id, name')
-    .ilike('name', '%Alcohol Tester%')
-    .single();
+const run = async () => {
+  console.log("🚀 Starting Predictable Image Sync...");
 
-  if (!product) {
-    console.error("❌ ERROR: Haijawahi kupatikana bidhaa yoyote yenye neno 'Alcohol Tester' kwenye DB!");
-    process.exit();
-  }
-
-  console.log(`📦 Found Product: ${product.name} (ID: ${product.id})`);
-
-  const localFiles = [
-    'tester (1).jpg',  // THUMBNAIL
-    'tester (1).jpeg', 
-    'tester (2).jpg', 
-    'tester (3).webp', 
-    'tester (4).webp', 
-    'tester (5).webp'
+  const mapping = [
+    // MOTOROLA R2
+    { name: "Mototrbo R2", brand: "Motorola", local: ["R2-1.jpg", "R2-2.jpg", "R2-3.jpg"], idBase: "moto_r2" },
+    // MOTOROLA R7
+    { name: "Mototrbo R7", brand: "Motorola", local: ["R7-1.jpg", "R7-2.jpg", "R7-3.jpg", "R7-4.jpg"], idBase: "moto_r7" },
+    // MOTOROLA T82
+    { name: "Motorola T82/T80", brand: "Motorola", local: ["T82-1.jpg", "T82-2.png", "T82-3.jpg", "T82-4.jpg", "T82-5.png"], idBase: "moto_t82" },
+    // MOTOROLA GP340
+    { name: "Motorola GP340/328", brand: "Motorola", local: ["gp328-1.png", "gp340-2.jpg", "gp340-3.png", "gp340-5.png"], idBase: "moto_gp340" },
+    // KENWOOD NX3300
+    { name: "Nexedge NX-3300", brand: "Kenwood", local: ["nx3300-1.jpg", "nx3300-2.jpg", "nx3300-3.jpg", "nx3300-4.jpg"], idBase: "ken_nx3300" },
+    // KENWOOD P1200
+    { name: "Kenwood NX-P1200NV", brand: "Kenwood", local: ["p1200nv-1.webp", "p1200nv-2.jpg", "p1200nv-3.png", "p1200nv-4.png"], idBase: "ken_p1200" }
   ];
 
-  const finalUrls = [];
-  for (const file of localFiles) {
-    const filePath = path.join(__dirname, '../client/public', file);
-    if (fs.existsSync(filePath)) {
-      console.log(`📤 Uploading ${file}...`);
-      const res = await cloudinary.uploader.upload(filePath, {
-        folder: "onewave_industrial_inventory",
-        overwrite: true,
-        quality: "auto:best"
-      });
-      finalUrls.push(res.secure_url);
+  for (const item of mapping) {
+    const urls = [];
+    for (let i = 0; i < item.local.length; i++) {
+      const url = await uploadPredictable(item.local[i], `${item.idBase}_${i + 1}`);
+      if (url) urls.push(url);
     }
+    
+    // Update Supabase with the new array of multiple images
+    await supabase.from('products').update({ images: urls }).eq('name', item.name);
+    console.log(`✅ ${item.name}: Synced ${urls.length} images.`);
   }
-
-  // 2. Update Database kwa kutumia ID (Njia ya uhakika zaidi)
-  const { error } = await supabase
-    .from('products')
-    .update({ 
-      name: 'Alcohol Tester', // Tunalazimisha jina fupi hapa
-      images: finalUrls 
-    })
-    .eq('id', product.id);
-
-  if (error) console.error("❌ Update failed:", error.message);
-  else console.log("✅ SUCCESS: Alcohol Tester updated with 4K images!");
 
   process.exit();
 };
 
-fix();
+run();
