@@ -16,12 +16,12 @@ const ProductCard = ({ product }) => {
       className="group bg-brand-darkGrey rounded-[2.5rem] overflow-hidden border border-white/5 hover:border-brand-orange/30 transition-all duration-500"
     >
       <Link to={`/product/${product.id}`}>
-        <div className="aspect-[4/5] overflow-hidden bg-brand-lightGrey relative">
+        <div className="aspect-square bg-brand-lightGrey/20 flex items-center justify-center overflow-hidden rounded-t-[2.5rem] p-6">
           <img 
-  src={product.images[0].replace('/upload/', '/upload/f_auto,q_auto:best,w_800/')} 
-  alt={product.name} 
-  className="w-full h-full object-contain p-6 transition-transform duration-700 group-hover:scale-105"
-  onError={(e) => { e.target.src = "https://via.placeholder.com/800x800?text=Image+Error"; }}
+  src={mainImage}
+  style={{ maxWidth: '100%', height: 'auto', margin: '0 auto' }}
+  className="max-w-full max-h-full w-auto h-auto object-contain antialiased"
+  alt={product.name}
 />
         </div>
 

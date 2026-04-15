@@ -69,7 +69,7 @@ const ProductDetails = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 src={activeImg ? activeImg.replace('/upload/', '/upload/f_auto,q_auto:best,w_1200/') : ''} 
-                className="w-full h-full object-contain p-8 md:p-12"
+                className="max-w-full max-h-full object-scale-down p-6"
                 alt={product.name} 
               />
             </AnimatePresence>
@@ -84,7 +84,7 @@ const ProductDetails = () => {
                 className={`w-24 h-24 rounded-2xl overflow-hidden border-2 transition-all flex-shrink-0 
                   ${activeImg === img ? 'border-brand-orange scale-95' : 'border-transparent opacity-40 hover:opacity-100'}`}
               >
-                <img src={img} className="w-full h-full object-cover" alt="" />
+                <img src={img} className="max-w-full max-h-full object-scale-down p-6" alt="" />
               </button>
             ))}
           </div>

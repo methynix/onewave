@@ -4,10 +4,12 @@ import { Toaster } from 'react-hot-toast';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
+import BrandPage from './pages/BrandPage';
 import ProductDetails from './pages/ProductDetails';
 import ContactPage from './pages/ContactPage';
 import CategoryPage from './pages/CategoryPage';
 import AboutUs from './pages/AboutPage';
+
 
 const RootLayout = () => (
   <div className="min-h-screen bg-brand-black text-white flex flex-col">
@@ -29,7 +31,8 @@ const router = createBrowserRouter([
       { path: "product/:id", element: <ProductDetails /> }, 
       { path: "category/:cat", element: <CategoryPage /> },
       { path: "contact", element: <ContactPage /> },
-      {path:"about",element:<AboutUs/>}
+      {path:"about",element:<AboutUs/>},
+      { path: "brand/:brandName", element: <BrandPage /> }
     ]
   }
 ]);

@@ -1,86 +1,159 @@
+import { useState, useEffect } from 'react';
 import { useGetProducts } from '../hooks/useProducts';
 import ProductCard from '../components/ProductCard';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const { data: products, isLoading } = useGetProducts();
+  const [heroIndex, setHeroIndex] = useState(0);
+  const navigate = useNavigate();
 
-  const heroItems = [
-    { name: "Android POS", src: "https://res.cloudinary.com/dwt1u991q/image/upload/v1/onewave_industrial_inventory/aprinter_(1)" },
-    { name: "Security Baton", src: "https://res.cloudinary.com/dwt1u991q/image/upload/v1/onewave_industrial_inventory/baton_(1)" },
-    { name: "Tactical Earpiece", src: "https://res.cloudinary.com/dwt1u991q/image/upload/v1/onewave_walkie_talkies/earpiece1" },
-    { name: "Thermal Printer", src: "https://res.cloudinary.com/dwt1u991q/image/upload/v1/onewave_industrial_inventory/H806_(3)" },
-    { name: "Discrete Comms", src: "https://res.cloudinary.com/dwt1u991q/image/upload/v1/onewave_walkie_talkies/K11-2" },
-    { name: "Metal Detector", src: "https://res.cloudinary.com/dwt1u991q/image/upload/v1/onewave_industrial_inventory/metaldetector_(1)" },
-    { name: "POS Monitor", src: "https://res.cloudinary.com/dwt1u991q/image/upload/v1/onewave_industrial_inventory/posmonitor_(2)" },
-    { name: "Mobile Radio", src: "https://res.cloudinary.com/dwt1u991q/image/upload/v1/onewave_industrial_inventory/radiobase_(1)" },
-    { name: "Barcode Scanner", src: "https://res.cloudinary.com/dwt1u991q/image/upload/v1/onewave_industrial_inventory/scanner_(1)" },
-    { name: "Alcohol Tester", src: "https://res.cloudinary.com/dwt1u991q/image/upload/v1/onewave_industrial_inventory/n6ziqgtpmofypzapezam" },
+  const heroImages = [
+    "https://res.cloudinary.com/dwt1u991q/image/upload/v1775730004/hero/iqfkgvizlwynonrufakk.jpg",
+    "https://res.cloudinary.com/dwt1u991q/image/upload/v1775730003/hero/lmladkdufmzwdfloyz72.jpg",
+    "https://res.cloudinary.com/dwt1u991q/image/upload/v1776143064/hero1_sxdyxc.png"
   ];
 
-  const infiniteLoop = [...heroItems, ...heroItems, ...heroItems];
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setHeroIndex((prev) => (prev === heroImages.length - 1 ? 0 : prev + 1));
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [heroImages.length]);
+
+  const nextHero = () => setHeroIndex(heroIndex === heroImages.length - 1 ? 0 : heroIndex + 1);
+  const prevHero = () => setHeroIndex(heroIndex === 0 ? heroImages.length - 1 : heroIndex - 1);
+
+  const getDisplayProducts = () => {
+    if (!products) return [];
+
+    const seriesBrands = ['Baofeng', 'Motorola', 'Kenwood'];
+    const seenBrands = new Set();
+    const filtered = [];
+
+    products.forEach(product => {
+      if (seriesBrands.includes(product.brand)) {
+        if (!seenBrands.has(product.brand)) {
+          // Create a special "Series" card object
+          filtered.push({
+            ...product,
+            id: `brand-${product.brand.toLowerCase()}`,
+            name: `${product.brand} Series`,
+            isBrandGroup: true,
+            originalBrand: product.brand
+          });
+          seenBrands.add(product.brand);
+        }
+      } else {
+        filtered.push(product);
+      }
+    });
+
+    return filtered;
+  };
+
+  const displayProducts = getDisplayProducts();
 
   return (
     <div className="pb-20 bg-brand-black">
-      {/* CINEMATIC HERO */}
-       <section className="relative h-[80svh] md:h-[85vh] flex items-center justify-center overflow-hidden border-b border-white/5">
+      {/* --- CINEMATIC HERO SECTION --- */}
+      <section className="relative h-[70vh] md:h-[85vh] w-full flex items-center justify-center overflow-hidden border-b border-white/5 bg-brand-orange/5">
         
-        {/* THE CONTINUOUS MARQUEE */}
-         <div className="absolute inset-0 z-0 flex items-center">
-          <motion.div 
-            className="flex h-full"
-            animate={{ x: ["0%", "-33.33%"] }} // Smoothly slides half the total width
-            transition={{ 
-              ease: "linear", 
-              duration: 10, // "Adorable Speed" - adjust for cinematic feel
-              repeat: Infinity 
-            }}
+        {/* SLIDESHOW LAYER */}
+        <div className="absolute inset-0 z-0">
+  <AnimatePresence mode="wait">
+    <motion.div
+      key={heroIndex}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 1.2 }}
+      className="absolute inset-0 w-full h-full" // Removed padding to let image go edge-to-edge
+    >
+      <img 
+        src={heroImages[heroIndex].replace('/upload/', '/upload/f_auto,q_auto:best,w_1920,c_fill/')} 
+        alt="ONEWAVE AFRICA Hero" 
+        // CHANGE: object-cover makes it fill the entire width and height
+        // brightness and contrast added to make it "Cinematic"
+        className="w-full h-full object-cover pointer-events-none brightness-[0.6] contrast-[1.1]"
+      />
+      {/* VITAL: The overlay ensures the "Ghost Text" remains readable on a full-blown image */}
+      <div className="absolute inset-0 bg-gradient-to-b from-brand-black/60 via-transparent to-brand-black" />
+    </motion.div>
+  </AnimatePresence>
+</div>
+
+        {/* GHOST TEXT OVERLAY */}
+        <div className="relative z-10 text-center px-4 max-w-5xl pointer-events-none">
+          <motion.span 
+            initial={{ opacity: 0 }} animate={{ opacity: 0.4 }}
+            className="text-brand-orange font-black tracking-[0.4em] text-[10px] md:text-xs uppercase mb-6 block"
           >
-            {infiniteLoop.map((item, index) => (
-              <div key={index} className="relative w-[100vw] md:w-[80vw] lg:w-[60vw] h-full flex-shrink-0 flex flex-col items-center justify-center p-12">
-                <img 
-                  src={item.src.replace('/upload/', '/upload/f_auto,q_auto:best,w_2000/')} 
-                  className="relative w-[100vw] h-full flex-shrink-0 flex flex-col items-center justify-center p-8 md:p-12"
-                  alt="" 
-                />
-                {/* NAME OVERLAY BELOW IMAGE */}
-                <div className="absolute bottom-10 text-brand-orange/40 font-black uppercase tracking-[0.8em] text-[10px] md:text-sm">
-                  {item.name}
-                </div>
-              </div>
-            ))}
-          </motion.div>
+            Tactical Solutions for Africa
+          </motion.span>
 
-          {/* VITAL CINEMATIC OVERLAY */}
-          <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-brand-black" />
-          <div className="absolute inset-0 bg-brand-black/20 backdrop-blur-[1px]" />
-        </div>
-
-        {/* HERO CONTENT */}
-        <div className="relative z-10 text-center px-4 max-w-6xl pointer-events-none">
           <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 0.8, y: 0 }}
-            className="text-6xl sm:text-8xl lg:text-[12rem] font-display font-black leading-none tracking-tighter uppercase italic text-white drop-shadow-2xl"
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 0.8, y: 0 }}
+            className="text-5xl sm:text-7xl md:text-8xl lg:text-[11rem] font-display font-black leading-none tracking-tighter uppercase italic text-white drop-shadow-2xl"
           >
             ONEWAVE <br /> <span className="text-brand-orange">AFRICA</span>
           </motion.h1>
-          <p className="max-w-xl mx-auto mt-6 text-gray-400 font-bold uppercase tracking-widest text-[10px] md:text-xs opacity-50">
-            Professional Equipment for the Digital Frontier
-          </p>
+
+          <motion.p 
+            initial={{ opacity: 0 }} animate={{ opacity: 0.5 }}
+            className="max-w-2xl mx-auto mt-6 text-gray-200 text-sm md:text-xl leading-relaxed px-4 font-medium"
+          >
+            We simplify technology for businesses by providing reliable equipment. 
+            From communication systems to POS devices, we help you work faster and safer.
+          </motion.p>
+        </div>
+
+        {/* MANUAL CONTROLS */}
+        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-4 md:px-10 z-20">
+          <button onClick={prevHero} className="p-3 md:p-5 rounded-full bg-white/5 hover:bg-brand-orange text-white transition-all backdrop-blur-sm border border-white/10 group">
+            <FiChevronLeft size={24} className="group-active:scale-90" />
+          </button>
+          <button onClick={nextHero} className="p-3 md:p-5 rounded-full bg-white/5 hover:bg-brand-orange text-white transition-all backdrop-blur-sm border border-white/10 group">
+            <FiChevronRight size={24} className="group-active:scale-90" />
+          </button>
+        </div>
+
+        {/* PROGRESS DOTS */}
+        <div className="absolute bottom-10 flex gap-2 z-20">
+          {heroImages.map((_, i) => (
+            <div 
+              key={i} 
+              className={`h-1 transition-all duration-500 rounded-full ${i === heroIndex ? 'w-8 bg-brand-orange' : 'w-2 bg-white/20'}`} 
+            />
+          ))}
         </div>
       </section>
 
-      {/* PRODUCT GRID */}
-      <div className="mt-20 px-4 md:px-0">
+      {/* --- OUR PRODUCTS SECTION --- */}
+      <div className="max-w-[1920px] mx-auto px-6 md:px-16 mt-24">
+        <div className="flex items-center gap-6 mb-16">
+          <h2 className="text-4xl md:text-6xl font-display font-black uppercase tracking-tighter text-white">
+            OUR <span className="text-brand-orange">PRODUCTS</span>
+          </h2>
+          <div className="h-[2px] flex-grow bg-gradient-to-r from-brand-orange/50 to-transparent" />
+        </div>
+
         {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {[1, 2, 3].map(n => <div key={n} className="h-80 md:h-96 bg-brand-darkGrey animate-pulse rounded-[2.5rem]" />)}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {[1, 2, 3, 4].map(n => <div key={n} className="h-[450px] bg-brand-darkGrey animate-pulse rounded-[3rem]" />)}
           </div>
         ) : (
-          <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-10">
-            {products?.map(product => (
-              <ProductCard key={product.id} product={product} />
+          <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 md:gap-12">
+            {displayProducts.map((product) => (
+              <div 
+                key={product.id}
+                onClick={() => product.isBrandGroup ? navigate(`/brand/${product.originalBrand}`) : null}
+                className={product.isBrandGroup ? 'cursor-pointer' : ''}
+              >
+                <ProductCard product={product} />
+              </div>
             ))}
           </section>
         )}
